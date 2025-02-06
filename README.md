@@ -1,4 +1,4 @@
-# AGI Test Client
+# AGI Client
 
 A Python client library for interacting with the General Reasoning platform API.
 
