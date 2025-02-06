@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+src/agi/__init__.py
+src/agi/api/__init__.py
+src/agi/api/client.py
+src/agi/api/consts.py
+src/agi_test.egg-info/PKG-INFO
+src/agi_test.egg-info/SOURCES.txt
+src/agi_test.egg-info/dependency_links.txt
+src/agi_test.egg-info/requires.txt
+src/agi_test.egg-info/top_level.txt

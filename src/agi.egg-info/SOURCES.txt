@@ -1,0 +1,9 @@
+LICENSE
+README.md
+pyproject.toml
+src/agi/__init__.py
+src/agi.egg-info/PKG-INFO
+src/agi.egg-info/SOURCES.txt
+src/agi.egg-info/dependency_links.txt
+src/agi.egg-info/requires.txt
+src/agi.egg-info/top_level.txt
