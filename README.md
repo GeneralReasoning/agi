@@ -19,8 +19,8 @@ import agi
 
 client = agi.Client(api_key=YOUR_API_KEY)
 
-# Get questions, answers and reasoning traces for math word problems
-client.get_data("math-word-problems")
+# Download reasoning traces and verifications as a .jsonl
+client.data.get(task='math-word-problems', model='DeepSeek-R1')
 ```
 
 ## License
