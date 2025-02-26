@@ -82,6 +82,87 @@ class Data:
             raise
 
 
+class Evals:
+    def __init__(self, client: 'Client'):
+        self.client = client
+
+    def get(self, dataset: str = None, task: str = None, split: str = 'test', n: int = 10000, page: int = 1) -> dict:
+        """
+        Retrieve questions from a dataset or task.
+
+        Args:
+            dataset (str, optional): Name of the dataset (e.g. 'Hendryks/MATH')
+            task (str, optional): Name of the task (e.g. 'mathematical-brainteasers')
+            split (str): Which split to retrieve ('train' or 'test'). Defaults to 'test'.
+
+        Returns:
+            dict: Question data containing id, dataset/task, question text, system prompt, etc.
+
+        Raises:
+            ValueError: If neither dataset nor task is provided
+        """
+        if not dataset and not task:
+            raise ValueError("Must provide either dataset or task")
+
+        params = {'split': split, 'n': n, 'page': page}
+        if dataset:
+            params['dataset'] = dataset
+        if task:
+            params['task'] = task
+
+        response = requests.get(
+            f"{GR_API_URL}evaluation/questions",
+            headers=self.client.headers,
+            params=params
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def get_tasks(self) -> list:
+        """
+        Get a list of all tasks available for evaluation.
+        """
+        response = requests.get(
+            f"{GR_API_URL}evaluation/tasks",
+            headers=self.client.headers
+        )
+        response.raise_for_status()
+        return response.json()
+    
+    def submit(self, question_id: str, model: str, reasoning_trace: str, answer: str, overwrite: bool = False) -> dict:
+        """
+        Submit a single response.
+        """
+        payload = {
+            "model": model,
+            "overwrite": overwrite,
+            "responses": [{
+                "question_id": question_id,
+                "reasoning_trace": reasoning_trace,
+                "answer": answer,
+            }]
+        }
+        url = f"{GR_API_URL}evaluation/submissions/"
+        response = requests.post(url, headers=self.client.headers, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def submit_batch(self, responses: list, model: str, overwrite: bool = False) -> dict:
+        """
+        Submit a batch of responses.
+        Each item in responses should be a dict with keys: question_id, reasoning_content, and answer_content.
+        """
+        payload = {
+            "model": model,
+            "responses": responses,
+            "overwrite": overwrite
+        }
+        url = f"{GR_API_URL}evaluation/submissions/"
+        response = requests.post(url, headers=self.client.headers, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+
 class Client:
     questions_endpoint = "get_data/task-data"
 
@@ -98,3 +179,4 @@ class Client:
             "Authorization": f"Bearer {self.api_key}"
         }
         self.data = Data(self)
+        self.evals = Evals(self)

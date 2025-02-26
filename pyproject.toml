@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agi"
-version = "0.1.1"
+version = "0.2.0"
 description = "A Python client library for interacting with the General Reasoning platform"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = { text = "MIT" }
 authors = [
     { name = "General Reasoning Team", email = "hello@gr.inc" }
 ]
